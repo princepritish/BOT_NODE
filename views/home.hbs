@@ -1,0 +1,80 @@
+<main>
+ {{#if redir}}
+    <script>alert('Your Appointment isBooked');
+        </script>
+        {{/if}}
+    {{#if redir1}}
+    <script>alert('Your Appointment for testing is Booked');
+        </script>
+        {{/if}}
+         <h2 style="text-align: center;margin:0;background-color: orangered; margin-left: 35%;margin-right: 35%;padding: 20px;"><u>BOT(Beds On Track)</u></h2>
+    <iframe src="https://ourworldindata.org/grapher/total-cases-covid-19?tab=map" width="100%" height="300px;"></iframe>
+    {{#if hasProducts }}
+        <h2 style="text-align: center;margin: 20px;background-color: orangered; margin-left: 35%;margin-right: 35%;padding: 20px;"><u>Hospitals</u></h2>
+<table class="table table-responsive table-bordered" id="hospital">
+  <thead class="table-danger">
+    <th>Hospital Code:</th>
+    <th>Hospital Name:</th>
+    <th>Hospital City:</th>
+    <th>Hospital State:</th>
+    <th>Hospital Address:</th>
+    <th>Hospital Pin Code:</th>
+    <th>Hospital Contact no.:</th>
+    <th>Total Beds:</th>
+    <th>Available Beds:</th>
+    <th>Booking Form:</th>
+    </thead>
+    {{#each prods}}
+  <tr>
+    <td>{{ this.uid}}</td>
+    <td>{{ this.title }}</td>
+    <td>{{ this.city }}</td>
+    <td>{{ this.state }}</td>
+    <td>{{this.address}}</td>
+    <td>{{this.pincode}}</td>
+    <td>{{this.mobile}}</td>
+    <td>{{this.Total}}</td>
+    <td>{{this.Available}}</td>
+    <td>
+      <a href="/book">
+        <button type="button" class="btn btn-primary" name="button">Book Appointment</button>
+      </a>
+    </td>
+  </tr>
+  {{/each}}
+</table>
+    <h2 style="text-align: center;margin: 20px;background-color: orangered; margin-left: 35%;margin-right: 35%;padding: 20px;"><u>Testing Facilities</u></h2>
+<table class="table table-responsive table-bordered" id="hosp">
+  <thead class="table-danger">
+    <th>Hospital Code:</th>
+    <th>Hospital Name:</th>
+    <th>Hospital Email:</th>
+    <th>Hospital Address:</th>
+    <th>Hospital Pin Code:</th>
+    <th>Hospital Contact no.:</th>
+    <th>Total Beds:</th>
+    <th>Available Beds:</th>
+    <th>Booking Form:</th>
+    </thead>
+    {{#each prods1}}
+  <tr>
+    <td>{{ this.uid}}</td>
+    <td>{{ this.title }}</td>
+    <td>{{ this.city }}</td>
+    <td>{{ this.state }}</td>
+    <td>{{this.address}}</td>
+    <td>{{this.pincode}}</td>
+    <td>{{this.mobile}}</td>
+    <td>{{this.Total}}</td>
+    <td>
+      <a href="/book">
+        <button type="button" class="btn btn-primary" name="button">Book Appointment</button>
+      </a>
+    </td>
+  </tr>
+  {{/each}}
+</table>
+    {{ else }}
+    <h1>No Products Found!</h1>
+    {{/if}}
+</main>

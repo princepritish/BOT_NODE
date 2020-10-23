@@ -1,0 +1,295 @@
+{% extends "base.html"%}
+{% block content %}
+<script src="https://code.jquery.com/jquery-1.11.3.js"></script>
+  <script>
+      $(document).ready(function () {
+          // Hide the div
+          $("#div1").hide();
+          // Show the div after 5s
+          $("#div1").delay(600).fadeIn(300).fadeOut(6000);
+      });
+  </script>
+<style>
+  h2
+  {
+    color: whitesmoke;
+  }
+      #div1 {
+  position: fixed;
+  display: none;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 2;
+  cursor: pointer;
+}
+#text{
+  position: absolute;
+  text-align: center;
+  top: 50%;
+  left: 50%;
+  font-size: 50px;
+  color: white;
+  transform: translate(-50%,-50%);
+  -ms-transform: translate(-50%,-50%);
+}
+table {
+  background-color: white;
+  font-weight: 500;
+}
+
+</style>
+<div id="div1" style="display:none"><div id="text">Rahul & Pritish's DBMS Project<br>Thanks for Viewing</div></div>
+  <span id="count"></span>
+  <div class="container-fluid">
+    <div class="text-center" >
+      {% if messages %}
+       {% for message in messages %}
+         <div class="alert alert-{{ message.tags }}" role="alert">
+           {{ message }}
+         </div>
+       {% endfor %}
+     {% endif %}
+    </div>
+  {% if is_hospital == "True" %}
+  <h1 style="margin-top: 60px;">Details</h1>
+  <p>Total beds: {{ current_instance.total_beds }}</p>
+  <p>Available beds: {{ current_instance.available_beds }}</p>
+  <p>Occupied beds: {{ current_instance.occupied_beds }}</p>
+  <a href="{% url 'accounts:hupdate' %}">
+    <button type="button" class="btn btn-success" name="button">Update</button><br>
+  </a>
+  {% if bookings_under == "No bookings" %}
+  <div class="text-center">
+       <div class="alert alert-warning" role="alert">
+         There are no bookings under your hospital name
+       </div>
+  </div>
+  {% else %}<br>
+  <table class="table table-bordered">
+    <thead class="table-success">
+      <th>User Code:</th>
+      <th>User Name:</th>
+      <th>User Address:</th>
+      <th>User Pin Code:</th>
+      <th>User Contact no.:</th>
+      <th>Symptoms :</th>
+      <th>Payment status :</th>
+      <th>Report Updation:</th>
+    </thead>
+    {% for bookings in bookings_under %}
+    <tr>
+      <td>{{ bookings.naiveuser_id }}</td>
+      <td>{{ bookings.name }}</td>
+      <td>{{ bookings.address }}</td>
+      <td>{{ bookings.pin_code }}</td>
+      <td>{{ bookings.contact_no }}</td>
+      <td>
+        {% if bookings.symptoms %}
+        <ul>
+          {% if bookings.symptoms.temprature %}<li>temprature</li>{% endif %}
+          {% if bookings.symptoms.headache %}<li>headache</li>{% endif %}
+          {% if bookings.symptoms.cough %}<li>cough</li>{% endif %}
+        </ul>
+        {% else %}
+          No symptoms
+        {% endif %}
+      </td>
+      <td>{% if bookings.payment %}PAID {% else %}NOT PAID{% endif %}</td>
+      <td>
+        <a href="{% url 'general:result' slug=bookings.naiveuser_id %}">
+          <button type="button" class="btn btn-success" name="button">Result</button>
+        </a>
+     </td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% endif %}
+  {% elif is_hospital == "False"%}
+  <h1>Details</h1>
+  <p>Availablity : {{ current_instance.availablity }}</p>
+  <a href="{% url 'accounts:tupdate' %}">
+    <button type="button" class="btn btn-sucsess"name="button">Update</button><br>
+  </a>
+  {% if bookings_under == "No bookings" %}
+  <div class="text-center">
+       <div class="alert alert-warning" role="alert">
+         There are no bookings under your testing facility name
+       </div>
+  </div>
+  {% else %}
+  <table class="table table-bordered">
+    <thead class="table-success">
+      <th>User Code:</th>
+      <th>User Name:</th>
+      <th>User Address:</th>
+      <th>User Pin Code:</th>
+      <th>User Contact no.:</th>
+      <th>Symptoms :</th>
+      <th>Payment status :</th>
+      <th>Report Updation:</th>
+    </thead>
+    {% for bookings in bookings_under %}
+    <tr>
+      <td>{{ bookings.naiveuser_id }}</td>
+      <td>{{ bookings.name }}</td>
+      <td>{{ bookings.address }}</td>
+      <td>{{ bookings.pin_code }}</td>
+      <td>{{ bookings.contact_no }}</td>
+      <td>
+        {% if bookings.symptoms %}
+        <ul>
+          {% if bookings.symptoms.temprature %}<li>temprature</li>{% endif %}
+          {% if bookings.symptoms.headache %}<li>headache</li>{% endif %}
+          {% if bookings.symptoms.cough %}<li>cough</li>{% endif %}
+        </ul>
+        {% else %}
+          No symptoms
+        {% endif %}
+      </td>
+      <td>{% if bookings.payment %}PAID {% else %}NOT PAID{% endif %}</td>
+      <td>
+        <a href="{% url 'general:result' slug=bookings.naiveuser_id %}">
+          <button type="button" class="btn btn-success" name="button">Result</button>
+        </a>
+     </td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% endif %}
+  {% else %}<br><br>
+  <h2 style=" border-radius: 25px; text-align: center; text-decoration: underline;margin: 20px;background-color: orangered; margin-left: 35%;margin-right: 35%;padding: 20px;">Beds On Track(BOT)</h2>
+  <iframe src="https://ourworldindata.org/grapher/total-cases-covid-19?tab=map" width="100%" height="300px;"></iframe>
+{% if filteredhospitals %}
+<h2 style="border-radius: 25px; text-align: center;margin: 20px;background-color: orangered; margin-left: 35%;margin-right: 35%;padding: 20px;"><u>Hospitals Near You:</u></h2>
+<table class="table table-responsive table-bordered">
+  <thead class="table-danger">
+    <th>Hospital Code:</th>
+    <th>Hospital Name:</th>
+    <th>Hospital Email:</th>
+    <th>Hospital Address:</th>
+    <th>Hospital Pin Code:</th>
+    <th>Hospital Contact no.:</th>
+    <th>Total Beds:</th>
+    <th>Available Beds:</th>
+    <th>Booking Form:</th>
+  </thead>
+  {% for hospital in filteredhospitals %}
+  <tr>
+    <td>{{ hospital.hospital.username }}</td>
+    <td>{{ hospital.name }}</td>
+    <td>{{ hospital.hospital.email }}</td>
+    <td>{{ hospital.address }}</td>
+    <td>{{ hospital.pin_code }}</td>
+    <td>{{ hospital.contact_no }}</td>
+    <td> {{ hospital.total_beds }}</td>
+    <td> {{ hospital.available_beds }}</td>
+    <td>
+      <a href="{% url 'general:booking' slug=hospital.slug %}">
+        <button type="button" class="btn btn-primary" name="button">Book Appointment</button>
+      </a>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% endif %}
+{% if filteredtesting %}
+<h2 style="border-radius: 25px; text-align: center;margin: 20px;background-color: orangered; margin-left: 35%;margin-right: 35%;padding: 20px;"><u>Testing Facilities Near You</u></h2>
+<table class="table table-bordered">
+  <thead class="table-danger">
+    <th>Testing Facility Code:</th>
+    <th>Testing Facility Name:</th>
+    <th>Testing Facility Email:</th>
+    <th>Testing Facility Address:</th>
+    <th>Testing Facility Pin Code:</th>
+    <th>Testing Facility Contact no.:</th>
+    <th>Availablity</th>
+    <th>Booking Form:</th>
+  </thead>
+  {% for test in filteredtesting %}
+  <tr>
+    <td>{{ test.testing.username }}</td>
+    <td>{{ test.name }}</td>
+    <td>{{ test.testing.email }}</td>
+    <td>{{ test.address }}</td>
+    <td>{{ test.pin_code }}</td>
+    <td>{{ test.contact_no }}</td>
+    <td>{{ test.availablity }}</td>
+    <td>
+      <a href="{% url 'general:booking' slug=test.slug %}">
+      <button type="button" class="btn btn-primary" name="button">Book Appointment</button>
+      </a>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% endif %}
+<h2 id="hospital" style="border-radius: 25px; text-align: center;margin: 20px;background-color: orangered; margin-left: 35%;margin-right: 35%;padding: 20px;"><u>Hospitals</u></h2>
+<table class="table table-responsive">
+  <thead class="table-primary">
+    <th>Hospital Code:</th>
+    <th>Hospital Name:</th>
+    <th>Hospital Email:</th>
+    <th>Hospital Address:</th>
+    <th>Hospital Pin Code:</th>
+    <th>Hospital Contact no.:</th>
+    <th>Total Beds:</th>
+    <th>Available Beds:</th>
+    <th>Booking Form:</th>
+  </thead>
+  {% for hospital in hospitals %}
+  <tr>
+    <td>{{ hospital.hospital.username }}</td>
+    <td>{{ hospital.name }}</td>
+    <td>{{ hospital.hospital.email }}</td>
+    <td>{{ hospital.address }}</td>
+    <td>{{ hospital.pin_code }}</td>
+    <td>{{ hospital.contact_no }}</td>
+    <td> {{ hospital.total_beds }}</td>
+    <td> {{ hospital.available_beds }}</td>
+    <td>
+      <a href="{% url 'general:booking' slug=hospital.slug %}">
+        <button type="button" class="btn btn-primary" name="button">Book Appointment</button>
+      </a>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+<h2 id="testing" style="border-radius: 25px; text-align: center;margin: 20px;background-color: orangered; margin-left: 35%;margin-right: 35%;padding: 20px;"><u>Testing Facility</u></h2>
+<table class="table table-hover">
+  <thead class="table-primary">
+    <th>Testing Facility Code:</th>
+    <th>Testing Facility Name:</th>
+    <th>Testing Facility Email:</th>
+    <th>Testing Facility Address:</th>
+    <th>Testing Facility Pin Code:</th>
+    <th>Testing Facility Contact no.:</th>
+    <th>Availablity</th>
+    <th>Booking Form:</th>
+  </thead>
+  {% for test in testing %}
+  <tr>
+    <td>{{ test.testing.username }}</td>
+    <td>{{ test.name }}</td>
+    <td>{{ test.testing.email }}</td>
+    <td>{{ test.address }}</td>
+    <td>{{ test.pin_code }}</td>
+    <td>{{ test.contact_no }}</td>
+    <td>{{ test.availablity }}</td>
+    <td>
+      <a href="{% url 'general:booking' slug=test.slug %}">
+      <button type="button" class="btn btn-primary" name="button">Book Appointment</button>
+      </a>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+<footer style="background-color: white; text-align: center; padding: 25px; font-weight: 700; bottom: 0px;">Copyright<i class="fa fa-copyright" aria-hidden="true"></i>:Rahul,Pritish & Thejineswar 2020</i></footer>
+
+{% endif %}
+</div>
+{% endblock %}
